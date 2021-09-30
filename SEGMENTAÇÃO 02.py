@@ -4,7 +4,7 @@ Created on Sat Sep 18 17:33:39 2021
 
 @author: Italla
 
-Imagem fornecida pela biblioteca
+Imagem da propria biblioteca
 """
 
 import numpy as np
@@ -17,23 +17,23 @@ import skimage
 
 rng = np.random.default_rng()
 
-# Generate noisy synthetic data
+# Gerar dados sintéticos ruidosos
 data = skimage.img_as_float(binary_blobs(length=128, seed=1))
 sigma = 0.35
 data += rng.normal(loc=0, scale=sigma, size=data.shape)
 data = rescale_intensity(data, in_range=(-sigma, 1 + sigma),
                          out_range=(-1, 1))
 
-# The range of the binary image spans over (-1, 1).
-# We choose the hottest and the coldest pixels as markers.
+# O intervalo da imagem binária se estende por (-1, 1).
+# Escolhemos os pixels mais quentes e mais frios como marcadores.
 markers = np.zeros(data.shape, dtype=np.uint)
 markers[data < -0.95] = 1
 markers[data > 0.95] = 2
 
-# Run random walker algorithm
+# Execute o algoritmo do walker aleatório
 labels = random_walker(data, markers, beta=10, mode='bf')
 
-# Plot results
+# Resultados de plotagem
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(8, 3.2),
                                     sharex=True, sharey=True)
 ax1.imshow(data, cmap='gray')
